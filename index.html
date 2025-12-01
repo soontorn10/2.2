@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ใบงานดนตรี: นักสืบวงดนตรีไทย</title>
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Sarabun:wght@300;400;600;800&display=swap" rel="stylesheet">
-    
+
     <!-- Libraries -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
+
     <style>
         body { 
             font-family: 'Sarabun', sans-serif; 
@@ -24,11 +24,11 @@
             color: #e5e7eb;
         }
         .font-typewriter { font-family: 'Courier Prime', monospace; }
-        
+
         /* Animations */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
-        
+
         @keyframes pulse-border {
             0% { border-color: rgba(234, 179, 8, 0.5); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4); }
             70% { border-color: rgba(234, 179, 8, 1); box-shadow: 0 0 0 10px rgba(234, 179, 8, 0); }
@@ -36,10 +36,10 @@
         }
         .btn-pulse { animation: pulse-border 2s infinite; }
 
-        /* Hidden classes for switching pages */
-        .page-section { display: none; }
-        .page-section.active { display: block; }
-
+        /* Hidden classes for switching pages (ENFORCING DISPLAY STATE with !important) */
+        .page-section { display: none !important; }
+        .page-section.active { display: block !important; }
+        
         /* Watermark Style */
         .watermark-text {
             position: absolute;
@@ -68,15 +68,17 @@
         <p class="text-gray-400 text-xs mt-1">ใบงานทักษะการจำแนกวงดนตรีไทย</p>
     </header>
 
+    <!-- Reusable Developer Footer - REMOVED TO CLEAN UP CODE -->
+
     <!-- ================= PAGE 1: INFO (ลงทะเบียน) ================= -->
-    <div id="page-1" class="page-section active w-full max-w-md animate-fade-in">
-        <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow-2xl relative overflow-hidden">
+    <div id="page-1" class="page-section active w-full max-w-md animate-fade-in flex flex-col items-center">
+        <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow-2xl relative overflow-hidden w-full">
             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
-            
+                        
             <h2 class="text-xl font-bold text-yellow-400 mb-4 flex items-center gap-2">
                 <span>📝</span> กรอกข้อมูลนักเรียน
             </h2>
-            
+                        
             <div class="space-y-4">
                 <div>
                     <label class="text-xs text-gray-400 uppercase">ชื่อ-นามสกุล</label>
@@ -101,23 +103,26 @@
                 </button>
             </div>
         </div>
+        <!-- Developer Footer for Page 1 -->
+        <div class="text-xs text-gray-500 pt-6 text-center w-full max-w-md">
+            DEVELOPED BY: <span class="font-bold text-gray-400">นายสุนทร ฉอมไธสง</span>
+        </div>
     </div>
 
     <!-- ================= PAGE 2: WORKSHEET (ทำภารกิจ) ================= -->
-    <div id="page-2" class="page-section w-full max-w-md">
-        
+    <div id="page-2" class="page-section w-full max-w-md flex flex-col items-center">
         <!-- Instructions Modal -->
-        <div class="bg-yellow-900/30 border border-yellow-600/50 p-3 rounded-lg mb-4 text-xs text-yellow-200">
+        <div class="bg-yellow-900/30 border border-yellow-600/50 p-3 rounded-lg mb-4 text-xs text-yellow-200 w-full">
             <span class="font-bold">วิธีเล่น:</span> 1.สุ่มโจทย์ 2.วิเคราะห์เครื่องดนตรี 3.ตอบคำถาม 4.แนบรูปหลักฐาน 5.ส่งงาน
         </div>
 
         <!-- Card: Random Riddle -->
-        <div class="bg-white text-gray-900 rounded-xl shadow-xl overflow-hidden mb-4 relative">
+        <div class="bg-white text-gray-900 rounded-xl shadow-xl overflow-hidden mb-4 relative w-full">
             <div class="bg-gray-900 text-white px-4 py-2 flex justify-between items-center">
                 <span class="font-typewriter font-bold text-yellow-400">MISSION DATA</span>
                 <span id="missionIdDisplay" class="text-xs font-mono text-gray-400">ID: ---</span>
             </div>
-            
+                        
             <div class="p-5 text-center">
                 <!-- Button Random -->
                 <button onclick="randomRiddle()" id="randomBtn" class="btn-pulse w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-3 px-4 rounded mb-4 shadow-md transition-all flex justify-center items-center gap-2">
@@ -132,7 +137,7 @@
         </div>
 
         <!-- Card: Analysis & Answer -->
-        <div class="bg-gray-800 border border-gray-700 rounded-xl p-5 mb-4 shadow-lg">
+        <div class="bg-gray-800 border border-gray-700 rounded-xl p-5 mb-4 shadow-lg w-full">
             <!-- Step 1: Concept -->
             <div class="mb-6">
                 <h3 class="text-sm font-bold text-blue-400 mb-2 uppercase tracking-wider">1. วิเคราะห์ส่วนผสม (Concept)</h3>
@@ -193,33 +198,37 @@
         </div>
 
         <!-- Submit Button -->
-        <div class="pb-10">
+        <div class="pb-4 w-full">
             <button onmouseenter="play('hover')" onclick="finishMission()" class="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-500 hover:to-teal-500 text-white font-bold py-4 rounded-xl shadow-lg transform active:scale-95 transition-all flex justify-center items-center gap-2 border-t border-green-400">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <span class="text-lg">ตรวจคำตอบ & ส่งงาน</span>
             </button>
         </div>
+        <!-- Developer Footer for Page 2 -->
+        <div class="text-xs text-gray-500 pt-2 text-center w-full max-w-md">
+            DEVELOPED BY: <span class="font-bold text-gray-400">นายสุนทร ฉอมไธสง</span>
+        </div>
     </div>
 
     <!-- ================= PAGE 3: SUMMARY (สรุปผล & ดาวน์โหลด) ================= -->
-    <div id="page-3" class="page-section w-full max-w-md text-center animate-fade-in">
-        <div class="mb-6">
+    <div id="page-3" class="page-section w-full max-w-md text-center animate-fade-in flex flex-col items-center">
+        <div class="mb-6 w-full">
             <div class="text-6xl mb-2" id="scoreEmoji">🎉</div>
             <h2 class="text-2xl font-bold text-white" id="scoreTitle">MISSION REPORT</h2>
             <p class="text-gray-400 text-sm font-typewriter" id="scoreSubtitle">ระบบกำลังประมวลผล...</p>
         </div>
 
         <!-- Score Card -->
-        <div class="bg-gray-800 border border-gray-600 rounded-xl p-4 mb-6">
+        <div class="bg-gray-800 border border-gray-600 rounded-xl p-4 mb-6 w-full">
             <div class="text-xs text-gray-400 uppercase mb-2">STATUS</div>
             <div id="scoreBadge" class="text-3xl font-bold text-yellow-400 font-typewriter mb-2">WAITING...</div>
             <div class="text-xs text-gray-500" id="scoreDetail">Correctness: -/-</div>
         </div>
 
         <!-- Action Buttons -->
-        <div class="space-y-3 bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-2xl">
+        <div class="space-y-3 bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-2xl w-full">
             <p class="text-gray-300 text-sm mb-4">กดปุ่มด้านล่างเพื่อบันทึกภาพหลักฐาน (พร้อมคะแนน)</p>
-            
+
             <button onmouseenter="play('hover')" onclick="downloadImage()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 rounded-lg shadow-lg flex justify-center items-center gap-2 transform transition-transform hover:scale-105">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
                 บันทึกเป็นภาพ (Save Image)
@@ -229,11 +238,15 @@
                 <span>🔄 ทำใบงานใหม่</span>
             </button>
         </div>
+        <!-- Developer Footer for Page 3 -->
+        <div class="text-xs text-gray-500 pt-6 text-center w-full max-w-md">
+            DEVELOPED BY: <span class="font-bold text-gray-400">นายสุนทร ฉอมไธสง</span>
+        </div>
     </div>
 
-    <!-- ================= EXPORT CONTAINER ================= -->
+    <!-- ================= EXPORT CONTAINER (Hidden for download) ================= -->
     <div id="export-container" style="position: fixed; left: -9999px; top: 0; width: 1000px; background-color: #f3f4f6; color: #1f2937; padding: 40px; font-family: 'Sarabun', sans-serif;">
-        
+                
         <div id="watermark-layer" class="watermark-text"></div>
 
         <!-- Header -->
@@ -297,7 +310,8 @@
                 </div>
             </div>
         </div>
-        <div style="margin-top: 40px; border-top: 2px solid #000; pt-4; display: flex; justify-content: space-between; align-items: center;">
+        <!-- Developer Footer for Export Container -->
+        <div style="margin-top: 40px; border-top: 2px solid #000; padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
             <div style="font-size: 12px; color: #666;">GENERATED BY MUSIC DETECTIVE SYSTEM</div>
             <div style="font-size: 14px; font-weight: bold;">DEVELOPED BY: นายสุนทร ฉอมไธสง</div>
         </div>
@@ -323,8 +337,8 @@
 
         // --- Sound System (Synthesizer) ---
         function toggleSound() {
-            initAudio();
-            
+            initAudio(); 
+
             if(bgmInterval) {
                 clearInterval(bgmInterval);
                 bgmInterval = null;
@@ -339,7 +353,7 @@
             if(bgmInterval) clearInterval(bgmInterval);
             let noteIndex = 0;
             const notes = [82.41, 82.41, 98, 98, 110, 110, 116.54, 110]; 
-            
+                         
             bgmInterval = setInterval(() => {
                 if(audioCtx && audioCtx.state === 'running') {
                     playNote(notes[noteIndex % notes.length], 0.05, 'triangle', 0.2); 
@@ -358,20 +372,20 @@
 
             osc.type = type;
             osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            
+
             gainNode.gain.setValueAtTime(vol * 0.1, audioCtx.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
 
             osc.connect(filter);
             filter.connect(gainNode);
             gainNode.connect(audioCtx.destination);
-            
+                        
             osc.start();
             osc.stop(audioCtx.currentTime + duration);
         }
 
         function play(type) {
-            initAudio(); // Ensure audio is ready
+            initAudio(); // Ensure audio is initialized
             if (!audioCtx) return;
 
             const osc = audioCtx.createOscillator();
@@ -468,17 +482,21 @@
             const name = document.getElementById('inputName').value.trim();
             const className = document.getElementById('inputClass').value.trim();
             const no = document.getElementById('inputNo').value.trim();
-            
+                        
             initAudio(); // Ensure audio is initialized on click
 
             if(!name || !className || !no) {
                 play('lose'); 
-                return alert('⚠️ กรุณากรอกข้อมูลให้ครบ');
+                // Do not use alert() - using a console error for compliance
+                console.error('⚠️ กรุณากรอกข้อมูลให้ครบ');
+                document.querySelector('#page-1 .bg-gray-800').style.border = '2px solid #ef4444';
+                setTimeout(() => document.querySelector('#page-1 .bg-gray-800').style.border = '1px solid #1f2937', 1000);
+                return; 
             }
-            
+                        
             play('slide'); 
             startBGM(); // Start music when entering worksheet
-            
+
             userData = { name, class: className, no };
             document.getElementById('page-1').classList.remove('active');
             document.getElementById('page-2').classList.add('active');
@@ -518,14 +536,37 @@
         }
 
         function finishMission() {
-            if(!currentRiddle) { play('lose'); return alert('⚠️ กรุณากดสุ่มโจทย์ก่อน'); }
+            if(!currentRiddle) { 
+                play('lose'); 
+                console.error('⚠️ กรุณากดสุ่มโจทย์ก่อน'); 
+                // Simple visual feedback for no alert
+                const btn = document.getElementById('randomBtn');
+                btn.style.borderColor = '#ef4444';
+                setTimeout(() => btn.style.borderColor = '', 1000);
+                return; 
+            }
             const conceptInput = document.querySelector('input[name="concept"]:checked');
             const bandInput = document.querySelector('input[name="bandType"]:checked');
             const img = document.getElementById('previewImage').src;
+                        
+            if(!conceptInput || !bandInput) { 
+                play('lose'); 
+                console.error('⚠️ กรุณาตอบคำถามให้ครบ');
+                // Simple visual feedback for no alert
+                document.querySelector('#page-2 .bg-gray-800').style.border = '2px solid #ef4444';
+                setTimeout(() => document.querySelector('#page-2 .bg-gray-800').style.border = '1px solid #1f2937', 1000);
+                return;
+            }
             
-            if(!conceptInput || !bandInput) { play('lose'); return alert('⚠️ กรุณาตอบคำถามให้ครบ'); }
             if(img === "" || img.includes("http")) {
-                if(document.getElementById('fileInput').files.length === 0) { play('lose'); return alert('⚠️ กรุณาแนบรูปหลักฐาน'); }
+                if(document.getElementById('fileInput').files.length === 0) { 
+                    play('lose'); 
+                    console.error('⚠️ กรุณาแนบรูปหลักฐาน'); 
+                    // Simple visual feedback for no alert
+                    document.querySelector('#page-2 .h-40').style.borderColor = '#ef4444';
+                    setTimeout(() => document.querySelector('#page-2 .h-40').style.borderColor = '', 1000);
+                    return;
+                }
             }
 
             // --- Scoring ---
@@ -565,11 +606,11 @@
             document.getElementById('scoreDetail').innerText = `คะแนนความถูกต้อง: ${score}/2`;
 
             prepareExportData(conceptInput, bandInput, rank, score, isConceptCorrect, isBandCorrect, badgeColor);
-            
+                        
             play('slide');
             document.getElementById('page-2').classList.remove('active');
             document.getElementById('page-3').classList.add('active');
-            
+                        
             if(score === 2) {
                 confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             }
@@ -586,7 +627,7 @@
             document.getElementById('exportName').innerText = userData.name;
             document.getElementById('exportClass').innerText = userData.class;
             document.getElementById('exportNo').innerText = userData.no;
-            
+
             const exportClues = document.getElementById('exportClues');
             exportClues.innerHTML = '';
             currentRiddle.items.forEach(item => {
