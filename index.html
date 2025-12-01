@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ใบงานดนตรี: นักสืบวงดนตรีไทย</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Sarabun:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Libraries -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body { 
+            font-family: 'Sarabun', sans-serif; 
+            background-color: #111827; 
+            background-image: radial-gradient(#1f2937 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: #e5e7eb;
+        }
+        .font-typewriter { font-family: 'Courier Prime', monospace; }
+        
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        
+        @keyframes pulse-border {
+            0% { border-color: rgba(234, 179, 8, 0.5); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4); }
+            70% { border-color: rgba(234, 179, 8, 1); box-shadow: 0 0 0 10px rgba(234, 179, 8, 0); }
+            100% { border-color: rgba(234, 179, 8, 0.5); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); }
+        }
+        .btn-pulse { animation: pulse-border 2s infinite; }
+
+        /* Hidden classes for switching pages */
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+
+        /* Watermark Style */
+        .watermark-text {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-wrap: wrap; justify-content: space-around; align-content: space-around;
+            pointer-events: none; opacity: 0.08; z-index: 50;
+            transform: rotate(-30deg) scale(1.5);
+        }
+        .watermark-item {
+            font-size: 24px; font-weight: bold; color: #000; margin: 50px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-6 px-4 select-none">
+
+    <!-- Sound Toggle Button -->
+    <button onclick="toggleSound()" id="soundBtn" class="fixed top-4 right-4 z-50 bg-gray-800 text-white p-2 rounded-full shadow-lg border border-gray-600 hover:bg-gray-700 transition-colors">
+        🔊
+    </button>
+
+    <!-- Logo / Header -->
+    <header class="mb-6 text-center">
+        <div class="inline-block bg-yellow-500 text-black font-bold px-2 py-0.5 text-xs mb-2 transform -rotate-2">Music Detective</div>
+        <h1 class="text-3xl font-bold text-white font-typewriter tracking-widest text-shadow">🕵️ นักสืบวงดนตรี</h1>
+        <p class="text-gray-400 text-xs mt-1">ใบงานทักษะการจำแนกวงดนตรีไทย</p>
+    </header>
+
+    <!-- ================= PAGE 1: INFO (ลงทะเบียน) ================= -->
+    <div id="page-1" class="page-section active w-full max-w-md animate-fade-in">
+        <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+            
+            <h2 class="text-xl font-bold text-yellow-400 mb-4 flex items-center gap-2">
+                <span>📝</span> กรอกข้อมูลนักเรียน
+            </h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">ชื่อ-นามสกุล</label>
+                    <input type="text" id="inputName" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:border-yellow-500 transition-colors text-white" placeholder="เช่น ด.ช.รักเรียน" oninput="initAudio(); play('type')" onfocus="initAudio()">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-xs text-gray-400 uppercase">ชั้น</label>
+                        <input type="text" id="inputClass" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:border-yellow-500 text-white" placeholder="ม.2/1" oninput="initAudio(); play('type')" onfocus="initAudio()">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-400 uppercase">เลขที่</label>
+                        <input type="number" id="inputNo" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 focus:outline-none focus:border-yellow-500 text-white" placeholder="00" oninput="initAudio(); play('type')" onfocus="initAudio()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <button onclick="goToPage2()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg shadow-lg transform active:scale-95 transition-all flex justify-center items-center gap-2">
+                    <span>เริ่มทำใบงาน</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 2: WORKSHEET (ทำภารกิจ) ================= -->
+    <div id="page-2" class="page-section w-full max-w-md">
+        
+        <!-- Instructions Modal -->
+        <div class="bg-yellow-900/30 border border-yellow-600/50 p-3 rounded-lg mb-4 text-xs text-yellow-200">
+            <span class="font-bold">วิธีเล่น:</span> 1.สุ่มโจทย์ 2.วิเคราะห์เครื่องดนตรี 3.ตอบคำถาม 4.แนบรูปหลักฐาน 5.ส่งงาน
+        </div>
+
+        <!-- Card: Random Riddle -->
+        <div class="bg-white text-gray-900 rounded-xl shadow-xl overflow-hidden mb-4 relative">
+            <div class="bg-gray-900 text-white px-4 py-2 flex justify-between items-center">
+                <span class="font-typewriter font-bold text-yellow-400">MISSION DATA</span>
+                <span id="missionIdDisplay" class="text-xs font-mono text-gray-400">ID: ---</span>
+            </div>
+            
+            <div class="p-5 text-center">
+                <!-- Button Random -->
+                <button onclick="randomRiddle()" id="randomBtn" class="btn-pulse w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-3 px-4 rounded mb-4 shadow-md transition-all flex justify-center items-center gap-2">
+                    <span class="text-xl">🎲</span> กดปุ่มสุ่มโจทย์
+                </button>
+
+                <!-- Clues Area -->
+                <div class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-4 min-h-[80px] flex flex-wrap justify-center gap-2 items-center" id="clueBox">
+                    <span class="text-gray-400 text-sm italic">รอรับข้อมูล...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card: Analysis & Answer -->
+        <div class="bg-gray-800 border border-gray-700 rounded-xl p-5 mb-4 shadow-lg">
+            <!-- Step 1: Concept -->
+            <div class="mb-6">
+                <h3 class="text-sm font-bold text-blue-400 mb-2 uppercase tracking-wider">1. วิเคราะห์ส่วนผสม (Concept)</h3>
+                <div class="space-y-2">
+                    <label class="flex items-center p-3 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-600 transition-colors border border-transparent hover:border-blue-400" onclick="play('click')">
+                        <input type="radio" name="concept" value="beat" class="w-4 h-4 text-blue-500 focus:ring-blue-500 bg-gray-800 border-gray-500">
+                        <span class="ml-3 text-sm text-gray-200">เน้น<b>เครื่องตี</b> (ระนาด/ฆ้อง) + ปี่</span>
+                    </label>
+                    <label class="flex items-center p-3 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-600 transition-colors border border-transparent hover:border-blue-400" onclick="play('click')">
+                        <input type="radio" name="concept" value="string" class="w-4 h-4 text-blue-500 focus:ring-blue-500 bg-gray-800 border-gray-500">
+                        <span class="ml-3 text-sm text-gray-200">เน้น<b>เครื่องสาย</b> (ซอ/จะเข้) + ขลุ่ย</span>
+                    </label>
+                    <label class="flex items-center p-3 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-600 transition-colors border border-transparent hover:border-blue-400" onclick="play('click')">
+                        <input type="radio" name="concept" value="mix" class="w-4 h-4 text-blue-500 focus:ring-blue-500 bg-gray-800 border-gray-500">
+                        <span class="ml-3 text-sm text-gray-200"><b>ผสมผสาน</b> (เครื่องสาย + เครื่องตี)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Step 2: Identify -->
+            <div class="mb-6">
+                <h3 class="text-sm font-bold text-green-400 mb-2 uppercase tracking-wider">2. ระบุชื่อวง (Identify)</h3>
+                <div class="flex gap-2 mb-3">
+                    <label class="flex-1 cursor-pointer group" onclick="play('click')">
+                        <input type="radio" name="bandType" value="ปี่พาทย์" class="peer hidden">
+                        <div class="text-center text-xs py-2 rounded bg-gray-700 text-gray-300 border border-gray-600 peer-checked:bg-green-600 peer-checked:text-white peer-checked:border-green-400 transition-all font-bold shadow-sm">
+                            ปี่พาทย์
+                        </div>
+                    </label>
+                    <label class="flex-1 cursor-pointer group" onclick="play('click')">
+                        <input type="radio" name="bandType" value="เครื่องสาย" class="peer hidden">
+                        <div class="text-center text-xs py-2 rounded bg-gray-700 text-gray-300 border border-gray-600 peer-checked:bg-green-600 peer-checked:text-white peer-checked:border-green-400 transition-all font-bold shadow-sm">
+                            เครื่องสาย
+                        </div>
+                    </label>
+                    <label class="flex-1 cursor-pointer group" onclick="play('click')">
+                        <input type="radio" name="bandType" value="มโหรี" class="peer hidden">
+                        <div class="text-center text-xs py-2 rounded bg-gray-700 text-gray-300 border border-gray-600 peer-checked:bg-green-600 peer-checked:text-white peer-checked:border-green-400 transition-all font-bold shadow-sm">
+                            มโหรี
+                        </div>
+                    </label>
+                </div>
+                <input type="text" id="specificBand" placeholder="ระบุชื่อวงเฉพาะ (ถ้าทราบ) เช่น เครื่องคู่..." class="w-full bg-gray-900 border-b border-gray-600 px-2 py-1 text-sm text-center focus:outline-none focus:border-green-400 text-green-300 placeholder-gray-600" onfocus="play('hover')" oninput="play('type')">
+            </div>
+
+            <!-- Step 3: Evidence -->
+            <div>
+                <h3 class="text-sm font-bold text-pink-400 mb-2 uppercase tracking-wider">3. หลักฐานภาพถ่าย (Evidence)</h3>
+                <div class="relative w-full h-40 bg-gray-900 border-2 border-dashed border-gray-600 rounded-lg flex justify-center items-center overflow-hidden cursor-pointer hover:bg-gray-800 hover:border-pink-400 transition-all group" onclick="document.getElementById('fileInput').click(); play('click');" onmouseenter="play('hover')">
+                    <img id="previewImage" class="absolute inset-0 w-full h-full object-cover hidden opacity-80" alt="Preview">
+                    <div id="placeholderText" class="text-center p-4 text-gray-500 group-hover:text-pink-400 transition-colors">
+                        <div class="text-2xl mb-1">📷</div>
+                        <span class="text-xs">แนบรูปจาก Google</span>
+                    </div>
+                    <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="loadImage(event)">
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pb-10">
+            <button onmouseenter="play('hover')" onclick="finishMission()" class="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-500 hover:to-teal-500 text-white font-bold py-4 rounded-xl shadow-lg transform active:scale-95 transition-all flex justify-center items-center gap-2 border-t border-green-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span class="text-lg">ตรวจคำตอบ & ส่งงาน</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 3: SUMMARY (สรุปผล & ดาวน์โหลด) ================= -->
+    <div id="page-3" class="page-section w-full max-w-md text-center animate-fade-in">
+        <div class="mb-6">
+            <div class="text-6xl mb-2" id="scoreEmoji">🎉</div>
+            <h2 class="text-2xl font-bold text-white" id="scoreTitle">MISSION REPORT</h2>
+            <p class="text-gray-400 text-sm font-typewriter" id="scoreSubtitle">ระบบกำลังประมวลผล...</p>
+        </div>
+
+        <!-- Score Card -->
+        <div class="bg-gray-800 border border-gray-600 rounded-xl p-4 mb-6">
+            <div class="text-xs text-gray-400 uppercase mb-2">STATUS</div>
+            <div id="scoreBadge" class="text-3xl font-bold text-yellow-400 font-typewriter mb-2">WAITING...</div>
+            <div class="text-xs text-gray-500" id="scoreDetail">Correctness: -/-</div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="space-y-3 bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-2xl">
+            <p class="text-gray-300 text-sm mb-4">กดปุ่มด้านล่างเพื่อบันทึกภาพหลักฐาน (พร้อมคะแนน)</p>
+            
+            <button onmouseenter="play('hover')" onclick="downloadImage()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 rounded-lg shadow-lg flex justify-center items-center gap-2 transform transition-transform hover:scale-105">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                บันทึกเป็นภาพ (Save Image)
+            </button>
+
+            <button onmouseenter="play('hover')" onclick="location.reload()" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-lg shadow flex justify-center items-center gap-2">
+                <span>🔄 ทำใบงานใหม่</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ================= EXPORT CONTAINER ================= -->
+    <div id="export-container" style="position: fixed; left: -9999px; top: 0; width: 1000px; background-color: #f3f4f6; color: #1f2937; padding: 40px; font-family: 'Sarabun', sans-serif;">
+        
+        <div id="watermark-layer" class="watermark-text"></div>
+
+        <!-- Header -->
+        <div style="border-bottom: 4px solid #000; padding-bottom: 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <h1 style="font-family: 'Courier Prime', monospace; font-size: 60px; font-weight: bold; line-height: 1; margin: 0;">MUSIC CASE FILE</h1>
+                <p style="margin: 5px 0 0 0; font-size: 20px; color: #666;">CONFIDENTIAL REPORT • <span id="exportDate"></span></p>
+            </div>
+            <div style="text-align: right;">
+                <div style="border: 3px solid #ef4444; color: #ef4444; font-weight: bold; font-size: 24px; padding: 5px 15px; display: inline-block; transform: rotate(-2deg);">TOP SECRET</div>
+                <div style="font-family: monospace; font-size: 18px; margin-top: 5px;">CASE ID: <span id="exportMissionId">---</span></div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div style="display: grid; grid-template-columns: 400px 1fr; gap: 30px;">
+            <!-- Left Column -->
+            <div>
+                <div style="background: #fff; border: 1px solid #000; padding: 20px; margin-bottom: 20px; box-shadow: 5px 5px 0px rgba(0,0,0,0.1);">
+                    <h3 style="font-weight: bold; border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 10px;">AGENT PROFILE</h3>
+                    <p style="margin: 5px 0; font-size: 18px;"><b>NAME:</b> <span id="exportName" style="color: #2563eb;">-</span></p>
+                    <p style="margin: 5px 0; font-size: 18px;"><b>CLASS:</b> <span id="exportClass">-</span> <b>NO:</b> <span id="exportNo">-</span></p>
+                </div>
+                <div style="background: #000; padding: 10px; margin-bottom: 20px;">
+                    <div style="background: #fff; padding: 5px;">
+                        <img id="exportImage" src="" style="width: 100%; height: 300px; object-fit: cover; display: block; filter: grayscale(20%) contrast(1.1);">
+                    </div>
+                    <p style="color: #fff; text-align: center; margin: 5px 0 0 0; font-size: 12px; font-family: monospace;">EVIDENCE PHOTO</p>
+                </div>
+                <!-- EVALUATION BOX -->
+                <div style="border: 4px double #000; padding: 15px; text-align: center;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 16px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">OFFICIAL EVALUATION</h3>
+                    <div id="exportRank" style="font-family: 'Courier Prime', monospace; font-size: 32px; font-weight: bold; color: #d97706;">PENDING</div>
+                    <div id="exportScore" style="font-size: 14px; color: #666;">SCORE: -/2</div>
+                </div>
+            </div>
+            <!-- Right Column -->
+            <div>
+                <div style="margin-bottom: 25px;">
+                    <h3 style="font-weight: bold; font-size: 24px; margin-bottom: 10px; display: flex; align-items: center;">
+                        <span style="background: #000; color: #fff; padding: 2px 8px; margin-right: 10px; font-size: 16px;">STEP 1</span> FOUND CLUES
+                    </h3>
+                    <div id="exportClues" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+                </div>
+                <div style="margin-bottom: 25px; background: #e5e7eb; padding: 15px; border-left: 5px solid #f59e0b; position: relative;">
+                    <h3 style="font-weight: bold; font-size: 20px; margin-bottom: 5px;">ANALYSIS LOG</h3>
+                    <p style="font-size: 18px; margin: 0;">Structure: <b id="exportConcept" style="color: #d97706;">-</b></p>
+                    <div id="markConcept" style="position: absolute; right: 10px; top: 10px; font-size: 24px;"></div>
+                </div>
+                <div style="position: relative; border: 1px solid #ccc; padding: 15px; background: #fff;">
+                    <h3 style="font-weight: bold; font-size: 24px; margin-bottom: 10px; display: flex; align-items: center;">
+                        <span style="background: #000; color: #fff; padding: 2px 8px; margin-right: 10px; font-size: 16px;">STEP 2</span> FINAL CONCLUSION
+                    </h3>
+                    <div style="font-size: 40px; font-weight: 800; color: #166534; line-height: 1.2;">
+                        TYPE: <span id="exportBandType">---</span>
+                    </div>
+                    <div style="font-size: 20px; color: #15803d; margin-top: 5px;">
+                        SPECIFIC: <span id="exportSpecificBand">---</span>
+                    </div>
+                    <div id="markBand" style="position: absolute; right: 20px; top: 20px; font-size: 40px;"></div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top: 40px; border-top: 2px solid #000; pt-4; display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-size: 12px; color: #666;">GENERATED BY MUSIC DETECTIVE SYSTEM</div>
+            <div style="font-size: 14px; font-weight: bold;">DEVELOPED BY: นายสุนทร ฉอมไธสง</div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        let userData = {};
+        let currentRiddle = null;
+        let soundEnabled = false;
+        let audioCtx = null;
+        let bgmInterval = null;
+
+        function initAudio() {
+            if(!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                soundEnabled = true;
+            }
+            if(audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // --- Sound System (Synthesizer) ---
+        function toggleSound() {
+            initAudio();
+            
+            if(bgmInterval) {
+                clearInterval(bgmInterval);
+                bgmInterval = null;
+                document.getElementById('soundBtn').innerText = '🔇';
+            } else {
+                startBGM();
+                document.getElementById('soundBtn').innerText = '🔊';
+            }
+        }
+
+        function startBGM() {
+            if(bgmInterval) clearInterval(bgmInterval);
+            let noteIndex = 0;
+            const notes = [82.41, 82.41, 98, 98, 110, 110, 116.54, 110]; 
+            
+            bgmInterval = setInterval(() => {
+                if(audioCtx && audioCtx.state === 'running') {
+                    playNote(notes[noteIndex % notes.length], 0.05, 'triangle', 0.2); 
+                    noteIndex++;
+                }
+            }, 500); 
+        }
+
+        function playNote(freq, duration, type, vol) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 400; 
+
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            
+            gainNode.gain.setValueAtTime(vol * 0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+
+            osc.connect(filter);
+            filter.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function play(type) {
+            initAudio(); // Ensure audio is ready
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            }
+            else if (type === 'type') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(800, now);
+                gainNode.gain.setValueAtTime(0.05, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            }
+            else if (type === 'hover') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1200, now);
+                gainNode.gain.setValueAtTime(0.02, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+                osc.start(now);
+                osc.stop(now + 0.03);
+            }
+            else if (type === 'slide') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.linearRampToValueAtTime(800, now + 0.2);
+                gainNode.gain.setValueAtTime(0.05, now);
+                gainNode.gain.linearRampToValueAtTime(0, now + 0.2);
+                osc.start(now);
+                osc.stop(now + 0.2);
+            }
+            else if (type === 'compute') {
+                osc.type = 'square';
+                for(let i=0; i<5; i++){
+                    osc.frequency.setValueAtTime(Math.random()*800 + 200, now + (i*0.05));
+                }
+                gainNode.gain.setValueAtTime(0.05, now);
+                gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+            else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(440, now); 
+                osc.frequency.setValueAtTime(554, now + 0.1); 
+                osc.frequency.setValueAtTime(659, now + 0.2); 
+                osc.frequency.setValueAtTime(880, now + 0.3); 
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.linearRampToValueAtTime(0, now + 1.0);
+                osc.start(now);
+                osc.stop(now + 1.0);
+            }
+            else if (type === 'lose') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.linearRampToValueAtTime(50, now + 0.4);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.linearRampToValueAtTime(0, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
+            else if (type === 'ok') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            }
+        }
+
+        // --- Riddle Database ---
+        const riddles = [
+            { id: "CS-P01", items: ["ระนาดเอก", "ฆ้องวงใหญ่", "ตะโพน", "ปี่ใน", "ฉิ่ง"], answer: { concept: 'beat', band: 'ปี่พาทย์' }},
+            { id: "CS-P02", items: ["ระนาดทุ้ม", "กลองทัด", "ปี่นอก", "ฆ้องวงเล็ก", "กรับ"], answer: { concept: 'beat', band: 'ปี่พาทย์' }},
+            { id: "CS-P03", items: ["ระนาดเอกเหล็ก", "ระนาดทุ้มเหล็ก", "ฆ้องหุ่ย", "ขลุ่ยเพียงออ", "ซออู้", "ตะโพน"], answer: { concept: 'beat', band: 'ปี่พาทย์' }},
+            { id: "CS-M01", items: ["ระนาดเอก", "ซอด้วง", "ซออู้", "จะเข้", "ขลุ่ยเพียงออ", "โทน-รำมะนา"], answer: { concept: 'mix', band: 'มโหรี' }},
+            { id: "CS-S01", items: ["จะเข้", "ซอด้วง", "ซออู้", "ขลุ่ยเพียงออ", "โทน-รำมะนา", "ฉิ่ง"], answer: { concept: 'string', band: 'เครื่องสาย' }}
+        ];
+
+        function goToPage2() {
+            const name = document.getElementById('inputName').value.trim();
+            const className = document.getElementById('inputClass').value.trim();
+            const no = document.getElementById('inputNo').value.trim();
+            
+            initAudio(); // Ensure audio is initialized on click
+
+            if(!name || !className || !no) {
+                play('lose'); 
+                return alert('⚠️ กรุณากรอกข้อมูลให้ครบ');
+            }
+            
+            play('slide'); 
+            startBGM(); // Start music when entering worksheet
+            
+            userData = { name, class: className, no };
+            document.getElementById('page-1').classList.remove('active');
+            document.getElementById('page-2').classList.add('active');
+        }
+
+        function randomRiddle() {
+            play('compute');
+            const btn = document.getElementById('randomBtn');
+            btn.classList.add('scale-95');
+            setTimeout(() => btn.classList.remove('scale-95'), 200);
+            const index = Math.floor(Math.random() * riddles.length);
+            currentRiddle = riddles[index];
+            document.getElementById('missionIdDisplay').innerText = "ID: " + currentRiddle.id;
+            const clueBox = document.getElementById('clueBox');
+            clueBox.innerHTML = '';
+            currentRiddle.items.forEach(item => {
+                const span = document.createElement('span');
+                span.className = "bg-gray-800 text-yellow-400 px-3 py-1 rounded text-sm font-bold border border-gray-600 shadow-sm";
+                span.innerText = item;
+                clueBox.appendChild(span);
+            });
+        }
+
+        function loadImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImage').src = e.target.result;
+                    document.getElementById('previewImage').classList.remove('hidden');
+                    document.getElementById('placeholderText').classList.add('hidden');
+                    document.getElementById('exportImage').src = e.target.result;
+                    play('ok');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function finishMission() {
+            if(!currentRiddle) { play('lose'); return alert('⚠️ กรุณากดสุ่มโจทย์ก่อน'); }
+            const conceptInput = document.querySelector('input[name="concept"]:checked');
+            const bandInput = document.querySelector('input[name="bandType"]:checked');
+            const img = document.getElementById('previewImage').src;
+            
+            if(!conceptInput || !bandInput) { play('lose'); return alert('⚠️ กรุณาตอบคำถามให้ครบ'); }
+            if(img === "" || img.includes("http")) {
+                if(document.getElementById('fileInput').files.length === 0) { play('lose'); return alert('⚠️ กรุณาแนบรูปหลักฐาน'); }
+            }
+
+            // --- Scoring ---
+            let score = 0;
+            const isConceptCorrect = conceptInput.value === currentRiddle.answer.concept;
+            const isBandCorrect = bandInput.value === currentRiddle.answer.band;
+            if(isConceptCorrect) score++;
+            if(isBandCorrect) score++;
+
+            // --- Rank & Sound ---
+            let rank = "";
+            let titleText = "";
+            let emoji = "";
+            let color = "";
+            let badgeColor = "";
+
+            if(score === 2) {
+                titleText = "ภารกิจสำเร็จ! (SUCCESS)";
+                rank = "ยอดนักสืบ (MASTER)";
+                emoji = "🏆";
+                color = "text-green-400";
+                badgeColor = "#16a34a";
+                play('win');
+            } else {
+                titleText = "ภารกิจไม่สำเร็จ (FAILED)";
+                rank = "กรุณาสืบสวนใหม่ (TRY AGAIN)";
+                emoji = "❌";
+                color = "text-red-500";
+                badgeColor = "#ef4444";
+                play('lose');
+            }
+
+            document.getElementById('scoreEmoji').innerText = emoji;
+            document.getElementById('scoreTitle').innerText = titleText;
+            document.getElementById('scoreBadge').innerText = rank;
+            document.getElementById('scoreBadge').className = `text-3xl font-bold font-typewriter mb-2 ${color}`;
+            document.getElementById('scoreDetail').innerText = `คะแนนความถูกต้อง: ${score}/2`;
+
+            prepareExportData(conceptInput, bandInput, rank, score, isConceptCorrect, isBandCorrect, badgeColor);
+            
+            play('slide');
+            document.getElementById('page-2').classList.remove('active');
+            document.getElementById('page-3').classList.add('active');
+            
+            if(score === 2) {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }
+        }
+
+        function prepareExportData(conceptInput, bandInput, rank, score, cOk, bOk, colorHex) {
+            const conceptMap = {
+                'beat': 'เน้นเครื่องตี + เป่าปี่ (ไม่มีเครื่องสาย)',
+                'string': 'เน้นเครื่องสาย + เป่าขลุ่ย (ไม่มีระนาด)',
+                'mix': 'ผสมผสาน (เครื่องสาย + เครื่องตี)'
+            };
+            document.getElementById('exportDate').innerText = new Date().toLocaleDateString('th-TH');
+            document.getElementById('exportMissionId').innerText = currentRiddle.id;
+            document.getElementById('exportName').innerText = userData.name;
+            document.getElementById('exportClass').innerText = userData.class;
+            document.getElementById('exportNo').innerText = userData.no;
+            
+            const exportClues = document.getElementById('exportClues');
+            exportClues.innerHTML = '';
+            currentRiddle.items.forEach(item => {
+                const div = document.createElement('div');
+                div.style = "border: 1px solid #000; padding: 5px 10px; font-weight: bold; background: #fff;";
+                div.innerText = item;
+                exportClues.appendChild(div);
+            });
+
+            document.getElementById('exportConcept').innerText = conceptMap[conceptInput.value];
+            document.getElementById('exportBandType').innerText = "วง" + bandInput.value;
+            document.getElementById('exportSpecificBand').innerText = document.getElementById('specificBand').value || "-";
+            document.getElementById('markConcept').innerHTML = cOk ? "✅" : "❌";
+            document.getElementById('markBand').innerHTML = bOk ? "✅" : "❌";
+            document.getElementById('exportRank').innerText = rank;
+            document.getElementById('exportRank').style.color = colorHex;
+            document.getElementById('exportScore').innerText = `SCORE: ${score}/2`;
+
+            const watermarkContainer = document.getElementById('watermark-layer');
+            watermarkContainer.innerHTML = '';
+            const wmText = `${userData.name} (${userData.class}) `;
+            for(let i=0; i<20; i++) {
+                const span = document.createElement('span');
+                span.className = 'watermark-item';
+                span.innerText = wmText;
+                watermarkContainer.appendChild(span);
+            }
+        }
+
+        function downloadImage() {
+            play('click');
+            const element = document.getElementById('export-container');
+            html2canvas(element, { scale: 2.5, useCORS: true, backgroundColor: "#f3f4f6" }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Mission_${userData.no}_${userData.name}.jpg`;
+                link.href = canvas.toDataURL('image/jpeg', 0.9);
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
