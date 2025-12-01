@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -67,8 +68,6 @@
         <h1 class="text-3xl font-bold text-white font-typewriter tracking-widest text-shadow">🕵️ นักสืบวงดนตรี</h1>
         <p class="text-gray-400 text-xs mt-1">ใบงานทักษะการจำแนกวงดนตรีไทย</p>
     </header>
-
-    <!-- Reusable Developer Footer - REMOVED TO CLEAN UP CODE -->
 
     <!-- ================= PAGE 1: INFO (ลงทะเบียน) ================= -->
     <div id="page-1" class="page-section active w-full max-w-md animate-fade-in flex flex-col items-center">
@@ -469,13 +468,24 @@
             }
         }
 
-        // --- Riddle Database ---
+        // --- Riddle Database (7 questions: Pi Phat 3, String 2, Mahori 2) ---
         const riddles = [
-            { id: "CS-P01", items: ["ระนาดเอก", "ฆ้องวงใหญ่", "ตะโพน", "ปี่ใน", "ฉิ่ง"], answer: { concept: 'beat', band: 'ปี่พาทย์' }},
-            { id: "CS-P02", items: ["ระนาดทุ้ม", "กลองทัด", "ปี่นอก", "ฆ้องวงเล็ก", "กรับ"], answer: { concept: 'beat', band: 'ปี่พาทย์' }},
-            { id: "CS-P03", items: ["ระนาดเอกเหล็ก", "ระนาดทุ้มเหล็ก", "ฆ้องหุ่ย", "ขลุ่ยเพียงออ", "ซออู้", "ตะโพน"], answer: { concept: 'beat', band: 'ปี่พาทย์' }},
+            // CS-P01: ปี่พาทย์เครื่องห้า (เครื่องตี)
+            { id: "CS-P01", items: ["ระนาดเอก", "ฆ้องวงใหญ่", "ปี่ใน", "กลองทัด", "ฉิ่ง"], answer: { concept: 'beat', band: 'ปี่พาทย์' }},
+            // CS-P02: ปี่พาทย์ (เน้นเครื่องโลหะผสม)
+            { id: "CS-P02", items: ["ระนาดเอกเหล็ก", "ระนาดทุ้มเหล็ก", "ฆ้องวงเล็ก", "ตะโพน", "ปี่ใน"], answer: { concept: 'beat', band: 'ปี่พาทย์' }},
+            // CS-P03: ปี่พาทย์เครื่องคู่ (เครื่องดนตรีครบวง เน้นตี)
+            { id: "CS-P03", items: ["ระนาดเอก", "ระนาดทุ้ม", "ฆ้องวงใหญ่", "ปี่ใน", "กลองสองหน้า"], answer: { concept: 'beat', band: 'ปี่พาทย์' }},
+            
+            // CS-S01: เครื่องสายเครื่องเดี่ยว (เครื่องสาย)
+            { id: "CS-S01", items: ["จะเข้", "ซอด้วง", "ซออู้", "ขลุ่ยเพียงออ", "โทน-รำมะนา", "ฉิ่ง"], answer: { concept: 'string', band: 'เครื่องสาย' }},
+            // CS-S02: เครื่องสายผสม (เน้นซอสามสาย)
+            { id: "CS-S02", items: ["ซอสามสาย", "จะเข้", "ซออู้", "ขลุ่ยหลิบ", "โทน", "ฉิ่ง"], answer: { concept: 'string', band: 'เครื่องสาย' }},
+
+            // CS-M01: มโหรีเครื่องคู่ (ผสมผสาน)
             { id: "CS-M01", items: ["ระนาดเอก", "ซอด้วง", "ซออู้", "จะเข้", "ขลุ่ยเพียงออ", "โทน-รำมะนา"], answer: { concept: 'mix', band: 'มโหรี' }},
-            { id: "CS-S01", items: ["จะเข้", "ซอด้วง", "ซออู้", "ขลุ่ยเพียงออ", "โทน-รำมะนา", "ฉิ่ง"], answer: { concept: 'string', band: 'เครื่องสาย' }}
+            // CS-M02: มโหรี (ชุดเน้นตีผสมสาย)
+            { id: "CS-M02", items: ["ฆ้องวงใหญ่", "ระนาดทุ้ม", "ซอสามสาย", "จะเข้", "โทน-รำมะนา"], answer: { concept: 'mix', band: 'มโหรี' }}
         ];
 
         function goToPage2() {
@@ -487,7 +497,7 @@
 
             if(!name || !className || !no) {
                 play('lose'); 
-                // Do not use alert() - using a console error for compliance
+                // Use console.error and visual feedback instead of alert()
                 console.error('⚠️ กรุณากรอกข้อมูลให้ครบ');
                 document.querySelector('#page-1 .bg-gray-800').style.border = '2px solid #ef4444';
                 setTimeout(() => document.querySelector('#page-1 .bg-gray-800').style.border = '1px solid #1f2937', 1000);
@@ -539,7 +549,7 @@
             if(!currentRiddle) { 
                 play('lose'); 
                 console.error('⚠️ กรุณากดสุ่มโจทย์ก่อน'); 
-                // Simple visual feedback for no alert
+                // Visual feedback for missing step
                 const btn = document.getElementById('randomBtn');
                 btn.style.borderColor = '#ef4444';
                 setTimeout(() => btn.style.borderColor = '', 1000);
@@ -552,7 +562,7 @@
             if(!conceptInput || !bandInput) { 
                 play('lose'); 
                 console.error('⚠️ กรุณาตอบคำถามให้ครบ');
-                // Simple visual feedback for no alert
+                // Visual feedback for missing answer
                 document.querySelector('#page-2 .bg-gray-800').style.border = '2px solid #ef4444';
                 setTimeout(() => document.querySelector('#page-2 .bg-gray-800').style.border = '1px solid #1f2937', 1000);
                 return;
@@ -562,7 +572,7 @@
                 if(document.getElementById('fileInput').files.length === 0) { 
                     play('lose'); 
                     console.error('⚠️ กรุณาแนบรูปหลักฐาน'); 
-                    // Simple visual feedback for no alert
+                    // Visual feedback for missing image
                     document.querySelector('#page-2 .h-40').style.borderColor = '#ef4444';
                     setTimeout(() => document.querySelector('#page-2 .h-40').style.borderColor = '', 1000);
                     return;
@@ -617,6 +627,7 @@
         }
 
         function prepareExportData(conceptInput, bandInput, rank, score, cOk, bOk, colorHex) {
+            // Mapping for export text
             const conceptMap = {
                 'beat': 'เน้นเครื่องตี + เป่าปี่ (ไม่มีเครื่องสาย)',
                 'string': 'เน้นเครื่องสาย + เป่าขลุ่ย (ไม่มีระนาด)',
@@ -628,6 +639,7 @@
             document.getElementById('exportClass').innerText = userData.class;
             document.getElementById('exportNo').innerText = userData.no;
 
+            // Display clues for export
             const exportClues = document.getElementById('exportClues');
             exportClues.innerHTML = '';
             currentRiddle.items.forEach(item => {
@@ -637,6 +649,7 @@
                 exportClues.appendChild(div);
             });
 
+            // Display student answers and marks
             document.getElementById('exportConcept').innerText = conceptMap[conceptInput.value];
             document.getElementById('exportBandType').innerText = "วง" + bandInput.value;
             document.getElementById('exportSpecificBand').innerText = document.getElementById('specificBand').value || "-";
@@ -646,6 +659,7 @@
             document.getElementById('exportRank').style.color = colorHex;
             document.getElementById('exportScore').innerText = `SCORE: ${score}/2`;
 
+            // Setup Watermark
             const watermarkContainer = document.getElementById('watermark-layer');
             watermarkContainer.innerHTML = '';
             const wmText = `${userData.name} (${userData.class}) `;
@@ -660,7 +674,8 @@
         function downloadImage() {
             play('click');
             const element = document.getElementById('export-container');
-            html2canvas(element, { scale: 2.5, useCORS: true, backgroundColor: "#f3f4f6" }).then(canvas => {
+            // Use a higher scale for better resolution on download
+            html2canvas(element, { scale: 3, useCORS: true, backgroundColor: "#f3f4f6" }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `Mission_${userData.no}_${userData.name}.jpg`;
                 link.href = canvas.toDataURL('image/jpeg', 0.9);
